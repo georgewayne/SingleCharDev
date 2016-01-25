@@ -3,6 +3,8 @@
 #include <linux/device.h>
 #include <linux/cdev.h>
 
+#define MYDEVNAME "mydevname"
+
 static dev_t firstDev; // Global variable for the first device number
 static struct cdev c_dev; // Global variable for the character device structure
 static struct class *cl; // Global variable for the device class
@@ -25,7 +27,7 @@ static int __init mydev_init(void) /* Constructor */
     int ret;
     struct device *dev_ret;
 
-    if ((ret = alloc_chrdev_region(&firstDev, 0, 1, "mydevname")) < 0) {
+    if ((ret = alloc_chrdev_region(&firstDev, 0, 1, MYDEVNAME)) < 0) {
         printk(KERN_INFO "fail alloc_chrdev_region, code: %d\n", ret);
         goto fail_alloc_chardev_region;
     }
@@ -34,7 +36,7 @@ static int __init mydev_init(void) /* Constructor */
         printk(KERN_INFO "fail class_create, code: %d\n", ret);
         goto fail_class_create;
     }
-    if (IS_ERR(dev_ret = device_create(cl, NULL, firstDev, NULL, "mydevname"))) {
+    if (IS_ERR(dev_ret = device_create(cl, NULL, firstDev, NULL, MYDEVNAME))) {
         ret = PTR_ERR(dev_ret);
         printk(KERN_INFO "fail device_create, code: %d\n", ret);
         goto fail_device_create;
@@ -42,7 +44,7 @@ static int __init mydev_init(void) /* Constructor */
     cdev_init(&c_dev, &mydev_fops);
     if ((ret = cdev_add(&c_dev, firstDev, 1)) < 0)
         goto fail_cdev_add;
-    printk(KERN_INFO "mydev sucessfuly created\n");
+    printk(KERN_INFO "/dev/"MYDEVNAME " sucessfuly created\n");
     return 0;
 
 /* carefully backout on failure(s) */
@@ -62,7 +64,7 @@ static void __exit mydev_exit(void) /* Destructor */
     device_destroy(cl, firstDev);
     class_destroy(cl);
     unregister_chrdev_region(firstDev, 1);
-    printk(KERN_INFO "mydev unregistered\n");
+    printk(KERN_INFO "/dev/" MYDEVNAME " unregistered\n");
 }
 
 static int my_open(struct inode *i, struct file *f)
