@@ -1,5 +1,5 @@
 # SingleCharDev
-Example of creating a single Linux character device. Tested on kernel 4.1.15
+Example of creating a single Linux character device driver. Tested on kernel 4.1.15
 
 Usage:  
 1. first copy the files to your local machine by  
