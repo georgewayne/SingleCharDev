@@ -91,5 +91,6 @@ module_init(mydev_init);
 module_exit(mydev_exit);
 
 MODULE_LICENSE("GPL");
-MODULE_AUTHOR("my name <email@myemail.com>");
+MODULE_AUTHOR("George Wayne");
 MODULE_DESCRIPTION("my First Character Driver");
+MODULE_VERSION("1.0");
