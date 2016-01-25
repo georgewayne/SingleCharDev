@@ -5,7 +5,7 @@
 int main()
 {
     int ret, fd=0;
-    long choice=0;
+    int choice=0;
     size_t len=1;
     char str[256];
     while (choice != 5) {
